@@ -101,7 +101,7 @@ def build_tree(data, features, c_label, T):
     
     return T
 
-def sklearn_decision_tree(dataframe):
+def sklearn_decision_tree(dataframe, target_column):
     """
     Use Sklearn's decision tree to fit and print the tree structure.
     Steps:
@@ -110,22 +110,20 @@ def sklearn_decision_tree(dataframe):
     3. Train a DecisionTreeClassifier on the data.
     4. Print the tree structure using export_text.
     """
-    # TODO: Implement sklearn decision tree fitting and structure extraction logic here.
+    # TOD: Implement sklearn decision tree fitting and structure extraction logic here.
     encoded_df, encoders = encode_categorical(dataframe)
 
-    # **Step 2: Separate Features (X) and Target (y)**
     X = encoded_df.drop(columns=[target_column])  # Features
     y = encoded_df[target_column]  # Target label
 
-    # **Step 3: Train a Decision Tree Model**
     model = DecisionTreeClassifier(criterion="entropy", random_state=42)  # Using ID3 (Entropy)
     model.fit(X, y)
 
-    # **Step 4: Print the Tree Structure**
     tree_rules = export_text(model, feature_names=list(X.columns))
     print("Decision Tree Structure:\n", tree_rules)
 
     return model, encoders
+    pass
 
 def encode_categorical(df):
     """
@@ -145,6 +143,8 @@ def encode_categorical(df):
             encoders[col] = le  # Store encoder for later use
     
     return encoded_df, encoders
+
+
 
 
 def convert_to_anytree(tree, parent_name="Root"):
