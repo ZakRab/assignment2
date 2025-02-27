@@ -76,10 +76,15 @@ def build_tree(data, features, c_label, T):
     4. Recursively build the tree for each branch using the subset of data corresponding to each feature value.
     """
     # TOD: Implement tree construction logic here.
-    # Base Cases
+    # **Base Cases**
     if len(data) == 0 or len(features) == 0:
         return None
     
+    # If all examples belong to the same class, return that class
+    if len(data[c_label].unique()) == 1:
+        return data[c_label].iloc[0]
+
+    # **Step 2: Compute Information Gain for Each Feature**
     best_feature = None
     best_gain = 0
     
@@ -89,17 +94,23 @@ def build_tree(data, features, c_label, T):
             best_gain = gain
             best_feature = feature
 
+    # **Step 3: If no Information Gain, return majority class**
     if best_gain == 0:
         return data[c_label].mode()[0]  # Most common class
     
+    # **Step 4: Create a Decision Node**
     T[best_feature] = {}
 
+    # **Step 5: Recursively Split Data**
     for value in data[best_feature].unique():
         subset = data[data[best_feature] == value]
         subset = subset.drop(columns=[best_feature])  # Remove used feature
-        T[best_feature][value] = build_tree(subset, [f for f in features if f != best_feature], c_label)
-    
+        
+        # 🔥 **Fix: Pass `{}` as a new dictionary for each subtree**
+        T[best_feature][value] = build_tree(subset, [f for f in features if f != best_feature], c_label, {})
+
     return T
+
 
 def sklearn_decision_tree(dataframe, target_column):
     """
@@ -187,7 +198,7 @@ if __name__ == "__main__":
     print(f"We should take the higher information gain, which is ice: {max(info_gain_ice, info_gain_above_freezing)}")
 
     # Example use
-    df = fetch_and_clean('mushrooms.csv')
+    df = fetch_and_clean('mushroom.csv')
     c_label = 'class'
     CLASSES = len(df[c_label].unique())
 
@@ -203,4 +214,4 @@ if __name__ == "__main__":
     print_anytree(anytree_root)
 
     # SKLEARN TREE
-    sklearn_decision_tree(dataframe=df)
+    sklearn_decision_tree(dataframe=df, target_column=c_label)
