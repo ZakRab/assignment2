@@ -192,10 +192,10 @@ def fetch_and_clean(file_name):
     return df
 
 if __name__ == "__main__":
-    df = fetch_and_clean('gain.csv')
-    info_gain_ice = get_information_gain(df, 'ice', 'school_cancelled?')
-    info_gain_above_freezing = get_information_gain(df, 'above_freezing', 'school_cancelled?')
-    print(f"We should take the higher information gain, which is ice: {max(info_gain_ice, info_gain_above_freezing)}")
+    # df = fetch_and_clean('gain.csv')
+    # info_gain_ice = get_information_gain(df, 'ice', 'school_cancelled?')
+    # info_gain_above_freezing = get_information_gain(df, 'above_freezing', 'school_cancelled?')
+    # print(f"We should take the higher information gain, which is ice: {max(info_gain_ice, info_gain_above_freezing)}")
 
     # Example use
     df = fetch_and_clean('mushroom.csv')
