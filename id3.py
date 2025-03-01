@@ -179,7 +179,7 @@ def fetch_and_clean():
     3. Return the cleaned dataframe.
     """
     # TOD: Implement data fetching and cleaning logic here.
-    df = pd.read_csv("mushroom.csv")
+    df = pd.read_csv("mushroom_data.csv")
     df = df.dropna()  # Drop rows with missing values
     return df
 
