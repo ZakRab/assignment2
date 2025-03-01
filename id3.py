@@ -178,7 +178,7 @@ def print_anytree(tree):
     """ Prints the decision tree in a structured way using anytree """
 
 
-def fetch_and_clean(file_name):
+def fetch_and_clean():
     """
     Import and clean the mushroom dataset.
     Steps:
@@ -187,7 +187,7 @@ def fetch_and_clean(file_name):
     3. Return the cleaned dataframe.
     """
     # TOD: Implement data fetching and cleaning logic here.
-    df = pd.read_csv(file_name)
+    df = pd.read_csv("mushroom.csv")
     df = df.dropna()  # Drop rows with missing values
     return df
 
@@ -198,7 +198,7 @@ if __name__ == "__main__":
     # print(f"We should take the higher information gain, which is ice: {max(info_gain_ice, info_gain_above_freezing)}")
 
     # Example use
-    df = fetch_and_clean('mushroom.csv')
+    df = fetch_and_clean()
     c_label = 'class'
     CLASSES = len(df[c_label].unique())
 
