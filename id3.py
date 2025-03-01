@@ -94,11 +94,6 @@ def build_tree(data, features, c_label, T):
             best_gain = gain
             best_feature = feature
 
-    # **Step 3: If no Information Gain, return majority class**
-    if best_gain == 0:
-        return data[c_label].mode()[0]  # Most common class
-    
-    # **Step 4: Create a Decision Node**
     T[best_feature] = {}
 
     # **Step 5: Recursively Split Data**
@@ -106,9 +101,6 @@ def build_tree(data, features, c_label, T):
         subset = data[data[best_feature] == value]
         subset = subset.drop(columns=[best_feature])  # Remove used feature
         
-        # 🔥 **Fix: Pass `{}` as a new dictionary for each subtree**
-        T[best_feature][value] = build_tree(subset, [f for f in features if f != best_feature], c_label, {})
-
     return T
 
 
