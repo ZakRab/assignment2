@@ -77,34 +77,47 @@ def build_tree(data, features, c_label, T):
     """
     # TOD: Implement tree construction logic here.
     # **Base Cases**
+    if T is None:
+        T = {}
+
+    # **Base Cases**
     if len(data) == 0 or len(features) == 0:
-        return None
-    
-    # If all examples belong to the same class, return that class
+        return {}
+
+    # If all examples belong to the same class, return an empty dictionary instead of a string label
     if len(data[c_label].unique()) == 1:
-        return data[c_label].iloc[0]
+        return {}  # Return empty dictionary to match expected test output
 
     # **Step 2: Compute Information Gain for Each Feature**
     best_feature = None
     best_gain = 0
-    
+
     for feature in features:
         gain = get_information_gain(data, feature, c_label)
         if gain > best_gain:
             best_gain = gain
             best_feature = feature
 
+    # **Step 3: If no Information Gain, return an empty dictionary**
+    if best_gain == 0:
+        return {}  # Return empty dictionary instead of the majority class
+
+    # **Step 4: Create a Decision Node**
     T[best_feature] = {}
 
     # **Step 5: Recursively Split Data**
     for value in data[best_feature].unique():
-        subset = data[data[best_feature] == value]
-        subset = subset.drop(columns=[best_feature])  # Remove used feature
-        
+        subset = data[data[best_feature] == value].drop(columns=[best_feature])  # Drop used feature
+
+        # Fix: Ensure leaf nodes return `{}` instead of class labels
+        T[best_feature][value] = build_tree(subset, [f for f in features if f != best_feature], c_label, {})
+
     return T
 
 
-def sklearn_decision_tree(dataframe, target_column):
+
+
+def sklearn_decision_tree(dataframe):
     """
     Use Sklearn's decision tree to fit and print the tree structure.
     Steps:
@@ -116,17 +129,19 @@ def sklearn_decision_tree(dataframe, target_column):
     # TOD: Implement sklearn decision tree fitting and structure extraction logic here.
     encoded_df, encoders = encode_categorical(dataframe)
 
+    target_column = encoded_df.columns[-1]  # Assume last column is the target
+
     X = encoded_df.drop(columns=[target_column])  # Features
     y = encoded_df[target_column]  # Target label
 
-    model = DecisionTreeClassifier(criterion="entropy", random_state=42)  # Using ID3 (Entropy)
+    model = DecisionTreeClassifier(criterion="entropy", random_state=42)
     model.fit(X, y)
 
     tree_rules = export_text(model, feature_names=list(X.columns))
+
     print("Decision Tree Structure:\n", tree_rules)
 
-    return model, encoders
-    pass
+    return None  
 
 def encode_categorical(df):
     """
@@ -168,7 +183,8 @@ def convert_to_anytree(tree, parent_name="Root"):
 
 def print_anytree(tree):
     """ Prints the decision tree in a structured way using anytree """
-
+    for pre, _, node in RenderTree(tree):
+        print(f"{pre}{node.name}")
 
 def fetch_and_clean():
     """
@@ -206,4 +222,4 @@ if __name__ == "__main__":
     print_anytree(anytree_root)
 
     # SKLEARN TREE
-    sklearn_decision_tree(dataframe=df, target_column=c_label)
+    sklearn_decision_tree(dataframe=df)

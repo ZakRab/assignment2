@@ -1,0 +1,25 @@
+Please answer the following questions in a short write-up:
+a. Despite their relative simplicity in regards to more advanced machine learning models
+such as neural networks, decision trees remain very popular for many classification and
+regression tasks. Why do you think that is?
+One of the major benefits that we learned in class about the decision trees is that they are really great at showing the researcher 
+what exactly went wrong in the model if there is a bug. For instance if the tree incorrectly identifies a data point then an individual 
+could follow the tree back and visually see where it went wrong. 
+
+
+b. Say you wanted to build a model to help the Nebraska State Parks commission identify
+certain types of fish based on their location, diet, color, and other such characteristics.
+Which of the two models we’ve studied thus far would you use and why? (Answer either
+Naive Bayes or Decision Tree, and review topics such as performance, ease of use,
+comprehension, etc.)
+Definitely would use a Decision tree simply because it is very similar to the idea of classification of mushrooms by the its characteristics
+and Naive Bayes would output a binary value whereas id3 would give us an actual class.
+
+
+c. Do some brief research on another type of decision tree algorithm. What error metric
+do they use if not information gain? Write some notes on at least one different decision
+tree algorithm and what sets it apart from the ID3 algorithm.
+The Cart decision tree is another kind of decision tree that splits on the gini index. 
+The Gini index ranges from 0 to 1, where 0 is pure and 1 is impure and is equal to 1 - the sum probs squared where as ID3 splits on 
+entropy and information gain. 
+
